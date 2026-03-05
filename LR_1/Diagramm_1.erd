@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<diagram version="1" name="Diagramm_1.erd">
+	<entities>
+		<data-source id="postgres-jdbc-19c4ff8e8b8-5b710350de90ab40">
+			<entity id="1" name="clients" fq-name="public.clients" order="0" x="264" y="194">
+				<path name="public"/>
+				<path name="bd_sergeev_pa07"/>
+			</entity>
+			<entity id="2" name="contracts" fq-name="public.contracts" order="1" x="40" y="204">
+				<path name="public"/>
+				<path name="bd_sergeev_pa07"/>
+			</entity>
+			<entity id="3" name="designation" fq-name="public.designation" order="2" x="264" y="50">
+				<path name="public"/>
+				<path name="bd_sergeev_pa07"/>
+			</entity>
+			<entity id="4" name="designation_employees" fq-name="public.designation_employees" order="3" x="40" y="40">
+				<path name="public"/>
+				<path name="bd_sergeev_pa07"/>
+			</entity>
+			<entity id="5" name="documents" fq-name="public.documents" order="4" x="40" y="776">
+				<path name="public"/>
+				<path name="bd_sergeev_pa07"/>
+			</entity>
+			<entity id="6" name="employees" fq-name="public.employees" order="5" x="264" y="378">
+				<path name="public"/>
+				<path name="bd_sergeev_pa07"/>
+			</entity>
+			<entity id="7" name="project" fq-name="public.project" order="6" x="264" y="562">
+				<path name="public"/>
+				<path name="bd_sergeev_pa07"/>
+			</entity>
+			<entity id="8" name="project_participants" fq-name="public.project_participants" order="7" x="40" y="388">
+				<path name="public"/>
+				<path name="bd_sergeev_pa07"/>
+			</entity>
+			<entity id="9" name="skills" fq-name="public.skills" order="8" x="40" y="592">
+				<path name="public"/>
+				<path name="bd_sergeev_pa07"/>
+			</entity>
+			<entity id="10" name="technology" fq-name="public.technology" order="9" x="264" y="746">
+				<path name="public"/>
+				<path name="bd_sergeev_pa07"/>
+			</entity>
+		</data-source>
+	</entities>
+	<relations>
+		<relation name="fk_cl" fq-name="public.contracts.fk_cl" type="fk" pk-ref="1" fk-ref="2"/>
+		<relation name="fk_des" fq-name="public.designation_employees.fk_des" type="fk" pk-ref="3" fk-ref="4"/>
+		<relation name="fk_dem" fq-name="public.designation_employees.fk_dem" type="fk" pk-ref="6" fk-ref="4"/>
+		<relation name="fk_emp" fq-name="public.project_participants.fk_emp" type="fk" pk-ref="6" fk-ref="8"/>
+		<relation name="fk_empl" fq-name="public.skills.fk_empl" type="fk" pk-ref="6" fk-ref="9"/>
+		<relation name="fk_tech" fq-name="public.contracts.fk_tech" type="fk" pk-ref="7" fk-ref="2"/>
+		<relation name="fk_doc" fq-name="public.documents.fk_doc" type="fk" pk-ref="7" fk-ref="5"/>
+		<relation name="fk_proj" fq-name="public.project_participants.fk_proj" type="fk" pk-ref="7" fk-ref="8"/>
+		<relation name="fk_tech" fq-name="public.skills.fk_tech" type="fk" pk-ref="10" fk-ref="9"/>
+	</relations>
+</diagram>
