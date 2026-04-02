@@ -1,5 +1,5 @@
 -- 1
-CREATE VIEW employee_details AS
+CREATE MATERIALIZED VIEW employee_details AS
 SELECT
 	e.lastname,
 	e.firstname,
