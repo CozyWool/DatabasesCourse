@@ -3,7 +3,6 @@
 -- вывести название и код проекта, даты начала и окончания проекта, код клиента и название
 -- и дату контракта
 
-CREATE VIEW client_project_info AS
 SELECT c.client_id,
 	   c.company_name,
 	   p.project_id,
