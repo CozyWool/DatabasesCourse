@@ -1,0 +1,109 @@
+-- 1
+SELECT CNUM, CNAME
+FROM Customers
+WHERE CHAR_LENGTH(CNAME) = (
+	SELECT MAX(CHAR_LENGTH(CNAME)) 
+    FROM Customers
+);
+
+-- 2
+SELECT PNUM, COUNT(*) AS FREQUENCY
+FROM Order_details
+GROUP BY PNUM
+HAVING FREQUENCY = (
+    SELECT COUNT(*) AS FREQUENCY
+    FROM Order_details 
+    GROUP BY PNUM 
+    ORDER BY FREQUENCY DESC 
+    LIMIT 1
+);
+
+-- 3а
+ALTER TABLE Customers
+MODIFY CNAME VARCHAR(50) NOT NULL,
+MODIFY CITY VARCHAR(50) NOT NULL,
+ADD CSURNAME VARCHAR(50);
+
+INSERT INTO Customers (CNUM, CNAME, CSURNAME, CITY, RATING) VALUES
+(2005, 'Владислав', 'Сергеев', 'Екатеринбург', 100);
+
+-- 3б
+INSERT INTO Orders (ODATE, CNUM, SNUM) VALUES
+('2026-04-30', 2005, 1001);
+
+-- 3в
+INSERT INTO Order_details (ONUM, PNUM, QUANTITY) VALUES
+(3007, 501, 3),
+(3007, 504, 4);
+
+-- 4
+SELECT ONUM, COUNT(PNUM) AS PRODUCT_TYPES_COUNT
+FROM Order_details
+GROUP BY ONUM;
+
+-- 5
+SELECT 
+    CNAME, 
+    RATING, 
+    CITY,
+    CASE 
+        WHEN RATING >= 200 THEN 'High Rating'
+        ELSE 'Low Rating'
+    END AS 'COMMENT'
+FROM Customers;
+
+-- 6
+SELECT 
+	p.PNAME, 
+    COALESCE(SUM(p.PRICE * od.QUANTITY), 0) AS TOTAL_INCOME
+FROM Product p
+LEFT JOIN Order_details od ON p.PNUM = od.PNUM
+GROUP BY p.PNUM;
+
+
+-- 7
+SELECT 
+    od.ONUM, 
+    SUM(p.PRICE * od.QUANTITY) AS TOTAL_SUM
+FROM Order_details od
+JOIN Product p ON od.PNUM = p.PNUM
+GROUP BY od.ONUM;
+
+-- 8
+WITH OrderSums AS (
+    SELECT 
+        o.ONUM, 
+        o.ODATE, 
+        s.SNAME, 
+        c.CNAME, 
+        SUM(p.PRICE * od.QUANTITY) AS TOTAL_SUM,
+        RANK() OVER (ORDER BY SUM(p.PRICE * od.QUANTITY) DESC) as RNK
+    FROM Orders o
+    JOIN Salespeople s ON o.SNUM = s.SNUM
+    JOIN Customers c ON o.CNUM = c.CNUM
+    JOIN Order_details od ON o.ONUM = od.ONUM
+    JOIN Product p ON od.PNUM = p.PNUM
+    GROUP BY od.ONUM
+)
+SELECT ONUM, ODATE, SNAME, CNAME, TOTAL_SUM
+FROM OrderSums
+WHERE RNK = 1;
+
+-- 9 
+SELECT 
+    o.ONUM, 
+    o.ODATE,
+    p.PNAME
+FROM Orders o
+JOIN Order_details od ON o.ONUM = od.ONUM
+JOIN Product p ON od.PNUM = p.PNUM
+WHERE p.PNAME LIKE '%Ноут%';
+
+-- 10
+SELECT 
+    PNAME,
+    PRICE AS PRICE_WITH_NDS,
+    ROUND(PRICE * 18 / 118, 2) AS NDS,
+    ROUND(PRICE / 1.18, 2) AS PRICE_WITHOUT_NDS
+FROM Product
+ORDER BY PRICE;
